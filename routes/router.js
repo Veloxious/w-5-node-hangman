@@ -4,10 +4,10 @@ const gen = hangLogic.gen
 const compareGuess = hangLogic.compareGuess
 
 var chosenWord = ""
-var correctGuess = []
+var display = ""
+var correctGuess = ""
 var guessCounter = 8
 var diff = ""
-
 
 const router = express.Router()
 
@@ -22,25 +22,34 @@ router.post('/:difficulty', function(req, res) {
   diff = req.params.difficulty
   console.log(diff);
   chosenWord = gen(diff)
-  correctGuess = []
-  correctGuess.push('X'.repeat(chosenWord.length))
+  display = ('X'.repeat(chosenWord.length))
   res.render('index', {
     title: `Hangman (${diff})`,
     theWord: chosenWord,
-    displayWord: correctGuess,
-    hiddenButton: 'hidden'
+    displayWord: display,
+    hiddenButton: 'hidden',
+    guessCounter: guessCounter
   })
 })
 
 router.post('/hangman/guess', function(req, res) {
+  if (guessCounter <= 0) {
+    res.send('GAMEOVER!')
+  }
   const guess = req.body.guess
-  console.log(guess);
-  compareGuess(guess)
+  let compare = display
+  console.log(chosenWord);
+  display = compareGuess(guess, chosenWord, display)
+  if (compare === display) {
+    guessCounter = guessCounter - 1
+  }
+  console.log(display);
   res.render('index', {
     title: `Hangman (${diff})`,
     theWord: chosenWord,
-    displayWord: correctGuess,
-    hiddenButton: 'hidden'
+    displayWord: display,
+    hiddenButton: 'hidden',
+    guessCounter: guessCounter
   })
 })
 
