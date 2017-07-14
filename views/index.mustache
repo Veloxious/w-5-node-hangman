@@ -19,8 +19,10 @@
     <h1>{{theWord}}</h1>
     <h1>{{displayWord}}</h1>
     <form {{hiddenForm}} name="guess" action="/hangman/guess" method="post">
-      <input  type="text" name="guess" value="" palceholder="guess a letter">
+      <input autofocus  type="text" name="guess" value="" palceholder="guess a letter">
       <button type="submit" name="guessButton">Go!</button>
+      <br>
+      <span>{{guessedLeters}}</span>
     </form>
   </body>
 </html>

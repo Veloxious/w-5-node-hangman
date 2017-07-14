@@ -8,6 +8,7 @@ var display = ""
 var correctGuess = ""
 var guessCounter = 8
 var diff = ""
+var guesses = []
 
 const router = express.Router()
 
@@ -37,9 +38,12 @@ router.post('/hangman/guess', function(req, res) {
     res.send('GAMEOVER!')
   }
   const guess = req.body.guess
+  guesses.push(guess)
   let compare = display
-  console.log(chosenWord);
   display = compareGuess(guess, chosenWord, display)
+  if (display === chosenWord) {
+    res.send('YOU WIN!')
+  }
   if (compare === display) {
     guessCounter = guessCounter - 1
   }
@@ -49,7 +53,8 @@ router.post('/hangman/guess', function(req, res) {
     theWord: chosenWord,
     displayWord: display,
     hiddenButton: 'hidden',
-    guessCounter: guessCounter
+    guessCounter: guessCounter,
+    guessedLeters: guesses
   })
 })
 
